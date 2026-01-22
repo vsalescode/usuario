@@ -7,6 +7,7 @@ import com.vssfullstack.usuario.infrastructure.entity.Usuario;
 import com.vssfullstack.usuario.infrastructure.exceptions.ConflictException;
 import com.vssfullstack.usuario.infrastructure.exceptions.ResourceNotFoundException;
 import com.vssfullstack.usuario.infrastructure.repository.UsuarioRepository;
+import com.vssfullstack.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     // Salva usuario
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
@@ -85,6 +87,27 @@ public class UsuarioService {
     // Deleta usuario por email
     public void deletaUsuarioPorEmail(String email) {
         usuarioRepository.deleteByEmail(email);
+    }
+
+    // Atualiza dados do usuario
+    public UsuarioDTO atualizaDadosUsuario(String token, UsuarioDTO usuarioDTO) {
+
+        // Aqui busca o email do usuário através do token (email)
+        String email = jwtUtil.extractUsername(token.substring(7));
+
+
+        // Criptografia de senha
+        usuarioDTO.setSenha(usuarioDTO.getSenha() != null ? passwordEncoder.encode(usuarioDTO.getSenha()) : null );
+
+
+        // Buscou os dados do usuario do db
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Email não localizado"));
+        // Mescla dados que recebemos na requisição DTO com os dados do banco de dados
+        Usuario usuario = usuarioConverter.atualizaUsuario(usuarioDTO, usuarioEntity);
+
+        // Salva os dados do usuário convertido e pega os dados convertidos para usuarioDTO
+        return usuarioConverter.paraUsuarioDTO(usuarioRepository.save(usuario));
     }
 
 
