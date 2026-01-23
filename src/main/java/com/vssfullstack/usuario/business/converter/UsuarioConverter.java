@@ -13,23 +13,30 @@ import java.util.List;
 @Component
 public class UsuarioConverter {
 
+    // Converte UsuarioDTO para entidade Usuario
     public Usuario paraUsuario(UsuarioDTO usuarioDTO) {
-    return Usuario.builder()
-            .nome(usuarioDTO.getNome())
-            .email(usuarioDTO.getEmail())
-            .senha(usuarioDTO.getSenha())
-            .enderecos(paraListaEndereco(usuarioDTO.getEnderecos()))
-            .telefones(paraListaTelefone(usuarioDTO.getTelefones()))
 
-            .build();
+        // Cria a entidade Usuario a partir dos dados do DTO
+        return Usuario.builder()
+                .nome(usuarioDTO.getNome())
+                .email(usuarioDTO.getEmail())
+                .senha(usuarioDTO.getSenha())
+                .enderecos(paraListaEndereco(usuarioDTO.getEnderecos()))
+                .telefones(paraListaTelefone(usuarioDTO.getTelefones()))
+                .build();
     }
 
-
+    // Converte lista de EnderecoDTO para lista de Endereco
     public List<Endereco> paraListaEndereco(List<EnderecoDTO> enderecoDTOS) {
+
+        // Mapeia cada DTO para entidade Endereco
         return enderecoDTOS.stream().map(this::paraEndereco).toList();
     }
 
+    // Converte EnderecoDTO para entidade Endereco
     public Endereco paraEndereco(EnderecoDTO enderecoDTO) {
+
+        // Cria a entidade Endereco a partir dos dados do DTO
         return Endereco.builder()
                 .rua(enderecoDTO.getRua())
                 .numero(enderecoDTO.getNumero())
@@ -38,24 +45,29 @@ public class UsuarioConverter {
                 .cep(enderecoDTO.getCep())
                 .estado(enderecoDTO.getEstado())
                 .build();
-
     }
 
+    // Converte lista de TelefoneDTO para lista de Telefone
     public List<Telefone> paraListaTelefone(List<TelefoneDTO> telefoneDTOS) {
-        return telefoneDTOS.stream().map(this::paraTelefone).toList();
 
+        // Mapeia cada DTO para entidade Telefone
+        return telefoneDTOS.stream().map(this::paraTelefone).toList();
     }
 
+    // Converte TelefoneDTO para entidade Telefone
     public Telefone paraTelefone(TelefoneDTO telefoneDTO) {
+
+        // Cria a entidade Telefone a partir dos dados do DTO
         return Telefone.builder()
                 .numero(telefoneDTO.getNumero())
                 .ddd(telefoneDTO.getDdd())
                 .build();
     }
 
-    // CONVERSÃO
-
+    // Converte entidade Usuario para UsuarioDTO
     public UsuarioDTO paraUsuarioDTO(Usuario usuario) {
+
+        // Cria o DTO Usuario a partir da entidade
         return UsuarioDTO.builder()
                 .nome(usuario.getNome())
                 .email(usuario.getEmail())
@@ -65,12 +77,17 @@ public class UsuarioConverter {
                 .build();
     }
 
-
+    // Converte lista de Endereco para lista de EnderecoDTO
     public List<EnderecoDTO> paraListaEnderecoDTO(List<Endereco> enderecos) {
+
+        // Mapeia cada entidade Endereco para DTO
         return enderecos.stream().map(this::paraEnderecoDTO).toList();
     }
 
+    // Converte entidade Endereco para EnderecoDTO
     public EnderecoDTO paraEnderecoDTO(Endereco endereco) {
+
+        // Cria o DTO Endereco a partir da entidade
         return EnderecoDTO.builder()
                 .id(endereco.getId())
                 .rua(endereco.getRua())
@@ -80,15 +97,19 @@ public class UsuarioConverter {
                 .cep(endereco.getCep())
                 .estado(endereco.getEstado())
                 .build();
-
     }
 
+    // Converte lista de Telefone para lista de TelefoneDTO
     public List<TelefoneDTO> paraListaTelefoneDTO(List<Telefone> telefones) {
-        return telefones.stream().map(this::paraTelefoneDTO).toList();
 
+        // Mapeia cada entidade Telefone para DTO
+        return telefones.stream().map(this::paraTelefoneDTO).toList();
     }
 
+    // Converte entidade Telefone para TelefoneDTO
     public TelefoneDTO paraTelefoneDTO(Telefone telefone) {
+
+        // Cria o DTO Telefone a partir da entidade
         return TelefoneDTO.builder()
                 .id(telefone.getId())
                 .numero(telefone.getNumero())
@@ -96,10 +117,10 @@ public class UsuarioConverter {
                 .build();
     }
 
-
-    // Atualizar usuario
-
+    // Atualiza dados do usuário mantendo valores antigos quando DTO for nulo
     public Usuario atualizaUsuario(UsuarioDTO usuarioDTO, Usuario usuario) {
+
+        // Cria nova entidade Usuario mesclando dados novos e antigos
         return Usuario.builder()
                 .nome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : usuario.getNome())
                 .id(usuario.getId())
@@ -107,11 +128,13 @@ public class UsuarioConverter {
                 .email(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : usuario.getEmail())
                 .enderecos(usuario.getEnderecos())
                 .telefones(usuario.getTelefones())
-
                 .build();
     }
-    // Build para atualizar endereço
+
+    // Atualiza dados do endereço mantendo valores antigos quando DTO for nulo
     public Endereco atualizaEndereco(EnderecoDTO enderecoDTO, Endereco endereco) {
+
+        // Cria nova entidade Endereco mesclando dados novos e antigos
         return Endereco.builder()
                 .id(endereco.getId())
                 .rua(enderecoDTO.getRua() != null ? enderecoDTO.getRua() : endereco.getRua())
@@ -121,11 +144,12 @@ public class UsuarioConverter {
                 .cep(enderecoDTO.getCep() != null ? enderecoDTO.getCep() : endereco.getCep())
                 .complemento(enderecoDTO.getComplemento() != null ? enderecoDTO.getComplemento() : endereco.getComplemento())
                 .build();
-
     }
 
-    // Builder para atualizar telefone
+    // Atualiza dados do telefone mantendo valores antigos quando DTO for nulo
     public Telefone atualizaTelefone(TelefoneDTO telefoneDTO, Telefone telefone) {
+
+        // Cria nova entidade Telefone mesclando dados novos e antigos
         return Telefone.builder()
                 .id(telefone.getId())
                 .ddd(telefoneDTO.getDdd() != null ? telefoneDTO.getDdd() : telefone.getDdd())
@@ -133,6 +157,30 @@ public class UsuarioConverter {
                 .build();
     }
 
+    // Converte EnderecoDTO em entidade Endereco associada a um usuário
+    public Endereco paraEnderecoEntity(EnderecoDTO enderecoDTO, Long idUsuario) {
 
+        // Cria a entidade Endereco vinculando ao id do usuário
+        return Endereco.builder()
+                .rua(enderecoDTO.getRua())
+                .cidade(enderecoDTO.getCidade())
+                .numero(enderecoDTO.getNumero())
+                .estado(enderecoDTO.getEstado())
+                .cep(enderecoDTO.getCep())
+                .complemento(enderecoDTO.getComplemento())
+                .usuario_id(idUsuario)
+                .build();
+    }
 
+    // Converte TelefoneDTO em entidade Telefone associada a um usuário
+    public Telefone paraTelefoneEntity(TelefoneDTO telefoneDTO, Long idUsuario) {
+
+        // Cria a entidade Telefone vinculando ao id do usuário
+        return Telefone.builder()
+                .numero(telefoneDTO.getNumero())
+                .ddd(telefoneDTO.getDdd())
+                .usuario_id(idUsuario)
+                .build();
+
+    }
 }
