@@ -2,6 +2,8 @@ package com.vssfullstack.usuario.controller;
 
 
 import com.vssfullstack.usuario.business.UsuarioService;
+import com.vssfullstack.usuario.business.dto.EnderecoDTO;
+import com.vssfullstack.usuario.business.dto.TelefoneDTO;
 import com.vssfullstack.usuario.business.dto.UsuarioDTO;
 import com.vssfullstack.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +52,26 @@ public class UsuarioController {
         usuarioService.deletaUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
     }
-}
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> atualizaDadosUsuario(@RequestBody UsuarioDTO usuarioDTO,
+                                                           @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(usuarioService.atualizaDadosUsuario(token, usuarioDTO));
+
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizaDadosEndereco(@RequestBody EnderecoDTO enderecoDTO,
+                                                             @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizaDadosEndereco(id, enderecoDTO));
+
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizaDadosTelefone(@RequestBody TelefoneDTO telefoneDTO,
+                                                             @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizaDadosTelefone(id, telefoneDTO));
+
+    }
+
+    }
