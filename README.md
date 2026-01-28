@@ -1,15 +1,15 @@
-
-# 📅 Task Scheduler – Microservices Architecture
+# 🧑‍💻 Agendador de Tarefas – Microserviço Usuário
 
 ![Java](https://img.shields.io/badge/Java-17+-red)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-green)
 ![JWT](https://img.shields.io/badge/Security-JWT-orange)
 ![OpenFeign](https://img.shields.io/badge/Communication-OpenFeign-informational)
 ![Build](https://img.shields.io/badge/Build-Maven-blueviolet)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
 
-Sistema de **agendamento de tarefas** desenvolvido com **arquitetura de microserviços**, focado em escalabilidade, segurança e separação de responsabilidades.
+Sistema de **agendamento de tarefas** desenvolvido com **arquitetura de microserviços**, focado em **escalabilidade**, **segurança** e **separação de responsabilidades**.
 
 Os microserviços se comunicam entre si utilizando **Spring Cloud OpenFeign**, garantindo chamadas HTTP desacopladas, declarativas e de fácil manutenção.
 
@@ -20,7 +20,7 @@ Os microserviços se comunicam entre si utilizando **Spring Cloud OpenFeign**, g
 ```text
 [BFF]
   ├── Usuario Service (✅ Completo)
-  ├── Agendador Service (🚧 Em progresso)
+  ├── Agendador Service (✅ Completo)
   ├── Notificacao Service (🔜 Email)
   └── Comunicação via OpenFeign
 ```
@@ -31,59 +31,43 @@ Os microserviços se comunicam entre si utilizando **Spring Cloud OpenFeign**, g
 
 - Comunicação síncrona via **REST**
 - Clientes declarativos com **Spring Cloud OpenFeign**
-- Reduz acoplamento entre serviços
-- Facilita manutenção e testes
+- Reaproveitamento de JWT entre serviços
+- Redução de acoplamento
+- Facilidade de manutenção e testes
 
 Exemplo de uso:
-- Agendador consulta dados do Usuário
-- Notificação consome eventos do Agendador
+- Agendador valida usuário via token JWT
+- Agendador consulta dados do Usuário quando necessário
+- Notificação consumirá eventos do Agendador
 - BFF centraliza chamadas aos microserviços
 
 ---
 
-## 🧑‍💻 Microserviço de Usuário (Status: ✅ Completo)
+## 🧩 Microserviços
 
-Funcionalidades:
-- Cadastro de usuários
-- Autenticação com JWT
-- Gerenciamento de dados pessoais
-- Endereços e telefones
-- Segurança com Spring Security
-
-### 🔐 Autenticação
-```
-Authorization: Bearer <token>
-```
-
----
-
-## 🚀 Endpoints – Usuário
-
-| Método | Endpoint | Descrição |
-|------|--------|---------|
-| POST | `/usuario` | Cadastro |
-| POST | `/usuario/login` | Login |
-| GET | `/usuario?email=` | Buscar usuário |
-| PUT | `/usuario` | Atualizar usuário |
-| DELETE | `/usuario/{email}` | Deletar usuário |
-| POST | `/usuario/endereco` | Novo endereço |
-| PUT | `/usuario/endereco?id=` | Atualizar endereço |
-| POST | `/usuario/telefone` | Novo telefone |
-| PUT | `/usuario/telefone?id=` | Atualizar telefone |
-
----
-
-## 🗄️ Banco de Dados
-
+### 🧑‍💻 Usuario Service (✅ Completo)
+- Cadastro e autenticação
+- Emissão de JWT
+- Gerenciamento de dados do usuário
 - PostgreSQL
-- Spring Data JPA
-- Relacionamentos:
-  - Usuário → Endereços
-  - Usuário → Telefones
+
+### ⏰ Agendador Service (✅ Completo)
+- CRUD de tarefas
+- Agendamento por data/hora
+- Controle de status de notificação
+- MongoDB
+
+### 📧 Notificacao Service (🔜)
+- Envio de emails
+- Consumo de eventos do Agendador
+
+### 🛜 BFF (🔜)
+- Backend dedicado para o frontend
+- Consumo de Microserviços
 
 ---
 
-## 🛠️ Tecnologias
+## 🛠️ Stack Tecnológica
 
 - Java 17+
 - Spring Boot
@@ -91,42 +75,20 @@ Authorization: Bearer <token>
 - Spring Cloud OpenFeign
 - JWT
 - Spring Data JPA
+- Spring Data MongoDB
 - PostgreSQL
+- MongoDB
 - Maven
 - Lombok
 
 ---
 
-## ▶️ Executando Localmente
-
-### Pré-requisitos
-- Java 17+
-- Maven
-- PostgreSQL
-
-### application.properties
-```
-spring.datasource.url=jdbc:postgresql://localhost:5432/seu_banco
-spring.datasource.username=postgres
-spring.datasource.password=senha
-spring.jpa.hibernate.ddl-auto=update
-```
-
-### Run
-```
-mvn clean install
-mvn spring-boot:run
-```
-
----
-
 ## 🛣️ Roadmap
 
-- ✅ Usuário
-- 🚧 Agendador
-- 🔜 Notificação por Email
+- ✅ Usuario Service
+- ✅ Agendador Service
+- 🔜 Notificacao Service
 - 🔜 BFF
-- 🔜 Comunicação OpenFeign entre todos os serviços
 - 🔜 Docker / Docker Compose
 - 🔜 Testes Automatizados
 
@@ -134,4 +96,4 @@ mvn spring-boot:run
 
 ## 📌 Observações
 
-Projeto estruturado com foco em **arquitetura distribuída**, **segurança**, **boas práticas** e **comunicação desacoplada entre microserviços**.
+Projeto desenvolvido com foco em **arquitetura distribuída**, **segurança**, **boas práticas** e **preparação para escala**, ideal para portfólio e cenários reais.
