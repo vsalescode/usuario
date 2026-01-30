@@ -1,7 +1,7 @@
 # 🧑‍💻 Agendador de Tarefas – Microserviço Usuário
 
 ![Java](https://img.shields.io/badge/Java-17+-red)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.x-brightgreen)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
 ![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-green)
 ![JWT](https://img.shields.io/badge/Security-JWT-orange)
