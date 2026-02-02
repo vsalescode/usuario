@@ -21,7 +21,7 @@ Os microserviços se comunicam entre si utilizando **Spring Cloud OpenFeign**, g
 [BFF]
   ├── Usuario Service (✅ Completo)
   ├── Agendador Service (✅ Completo)
-  ├── Notificacao Service (🔜 Email)
+  ├── Notificacao Service (✅ Completo)
   └── Comunicação via OpenFeign
 ```
 
