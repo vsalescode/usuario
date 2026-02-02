@@ -102,7 +102,7 @@ public class UsuarioController {
 
     // Endpoint para cadastrar um novo telefone para o usuário autenticado
     @PostMapping("/telefone")
-    public ResponseEntity<TelefoneDTO> cadastraEndereco(@RequestBody TelefoneDTO telefoneDTO,
+    public ResponseEntity<TelefoneDTO> cadastraTelefone(@RequestBody TelefoneDTO telefoneDTO,
                                                         @RequestHeader("Authorization") String token) {
 
         // Chama o service para cadastrar o telefone e retorna o DTO salvo
