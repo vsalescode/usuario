@@ -1,99 +1,175 @@
-# 🧑‍💻 Agendador de Tarefas – Microserviço Usuário
+# 🔐 Serviço de Usuário (User Service)
 
-![Java](https://img.shields.io/badge/Java-17+-red)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.x-brightgreen)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
-![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-green)
-![JWT](https://img.shields.io/badge/Security-JWT-orange)
-![OpenFeign](https://img.shields.io/badge/Communication-OpenFeign-informational)
-![Build](https://img.shields.io/badge/Build-Maven-blueviolet)
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+O **"Guardião" da segurança** do ecossistema.\
+Responsável pela gestão de identidades, autenticação (OAuth/JWT) e
+persistência dos dados cadastrais de usuários, endereços e telefones.
 
-Sistema de **agendamento de tarefas** desenvolvido com **arquitetura de microserviços**, focado em **escalabilidade**, **segurança** e **separação de responsabilidades**.
+------------------------------------------------------------------------
 
-Os microserviços se comunicam entre si utilizando **Spring Cloud OpenFeign**, garantindo chamadas HTTP desacopladas, declarativas e de fácil manutenção.
+## 🚀 Visão Geral
 
----
+Este microsserviço é a base de segurança de todo o sistema.\
+Além do CRUD de usuários, ele atua como **Identity Provider**, sendo
+responsável por:
 
-## 🧱 Arquitetura Geral
+-   Criptografia de senhas
+-   Validação de credenciais
+-   Emissão de Tokens JWT
+-   Proteção de endpoints via Spring Security
 
-```text
-[BFF]
-  ├── Usuario Service (✅ Completo)
-  ├── Agendador Service (✅ Completo)
-  ├── Notificacao Service (✅ Completo)
-  └── Comunicação via OpenFeign
+------------------------------------------------------------------------
+
+## ✅ Principais Responsabilidades
+
+-   🔑 **Autenticação:** Login e geração de Token JWT
+-   🔒 **Segurança de Dados:** Hash de senha com BCrypt
+-   👤 **Gestão Cadastral:** Usuários com múltiplos endereços e
+    telefones
+-   🛡️ **API Segura:** Proteção stateless com JWT
+
+------------------------------------------------------------------------
+
+## 🛠️ Tecnologias Utilizadas
+
+-   Java 17
+-   Spring Boot 3
+-   Spring Security
+-   JWT (HMAC SHA256)
+-   PostgreSQL
+-   Hibernate / JPA
+-   MapStruct
+-   Lombok
+
+------------------------------------------------------------------------
+
+## ⚙️ Configuração do Banco
+
+O serviço roda na porta **8080**.
+
+Arquivo:
+
+    src/main/resources/application.properties
+
+### Exemplo de Configuração
+
+``` properties
+spring.application.name=usuario
+server.port=8080
+
+# PostgreSQL
+spring.datasource.url=jdbc:postgresql://localhost:5432/db_usuario
+spring.datasource.username=postgres
+spring.datasource.password=sua-senha
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
 
----
+> Certifique-se de que o banco `db_usuario` exista.
 
-## 🔗 Comunicação entre Microserviços
+------------------------------------------------------------------------
 
-- Comunicação síncrona via **REST**
-- Clientes declarativos com **Spring Cloud OpenFeign**
-- Reaproveitamento de JWT entre serviços
-- Redução de acoplamento
-- Facilidade de manutenção e testes
+## 🔐 Fluxo de Autenticação (JWT)
 
-Exemplo de uso:
-- Agendador valida usuário via token JWT
-- Agendador consulta dados do Usuário quando necessário
-- Notificação consumirá eventos do Agendador
-- BFF centraliza chamadas aos microserviços
+A autenticação é **stateless**, sem sessão no servidor.
 
----
+1.  Cliente envia `email/senha` para `/usuario/login`
+2.  Serviço valida senha (BCrypt)
+3.  Se válido, gera JWT assinado (HMAC SHA256)
+4.  Cliente envia nos próximos requests:
 
-## 🧩 Microserviços
+```{=html}
+<!-- -->
+```
+    Authorization: Bearer {token}
 
-### 🧑‍💻 Usuario Service (✅ Completo)
-- Cadastro e autenticação
-- Emissão de JWT
-- Gerenciamento de dados do usuário
-- PostgreSQL
+------------------------------------------------------------------------
 
-### ⏰ Agendador Service (✅ Completo)
-- CRUD de tarefas
-- Agendamento por data/hora
-- Controle de status de notificação
-- MongoDB
+## 🔌 Endpoints
 
-### 📧 Notificacao Service (🔜)
-- Envio de emails
-- Consumo de eventos do Agendador
+### 📌 Públicos
 
-### 🛜 BFF (🔜)
-- Backend dedicado para o frontend
-- Consumo de Microserviços
+  Método   Rota               Descrição
+  -------- ------------------ -----------------------
+  POST     `/usuario`         Cadastra novo usuário
+  POST     `/usuario/login`   Retorna Token JWT
 
----
+------------------------------------------------------------------------
 
-## 🛠️ Stack Tecnológica
+### 🔒 Protegidos (Bearer Token obrigatório)
 
-- Java 17+
-- Spring Boot
-- Spring Security
-- Spring Cloud OpenFeign
-- JWT
-- Spring Data JPA
-- Spring Data MongoDB
-- PostgreSQL
-- MongoDB
-- Maven
-- Lombok
+  Método   Rota                 Descrição
+  -------- -------------------- ----------------------
+  GET      `/usuario`           Busca usuário logado
+  PUT      `/usuario`           Atualiza nome/senha
+  DELETE   `/usuario/{email}`   Remove usuário
 
----
+------------------------------------------------------------------------
 
-## 🛣️ Roadmap
+## 📍 Endereços e Telefones (OneToMany)
 
-- ✅ Usuario Service
-- ✅ Agendador Service
-- 🔜 Notificacao Service
-- 🔜 BFF
-- 🔜 Docker / Docker Compose
-- 🔜 Testes Automatizados
+### Endereço
 
----
+-   POST `/usuario/endereco`
+-   PUT `/usuario/endereco?id={id}`
 
-## 📌 Observações
+### Telefone
 
-Projeto desenvolvido com foco em **arquitetura distribuída**, **segurança**, **boas práticas** e **preparação para escala**, ideal para portfólio e cenários reais.
+-   POST `/usuario/telefone`
+-   PUT `/usuario/telefone?id={id}`
+
+------------------------------------------------------------------------
+
+## 💾 Modelo de Dados
+
+Relacionamento:
+
+-   1 Usuário → N Endereços
+-   1 Usuário → N Telefones
+
+Estrutura:
+
+-   **USUARIO**
+    -   id (PK)
+    -   email (UK)
+    -   senha
+    -   nome
+-   **ENDERECO**
+    -   id (PK)
+    -   rua
+    -   cidade
+    -   cep
+    -   usuario_id (FK)
+-   **TELEFONE**
+    -   id (PK)
+    -   numero
+    -   ddd
+    -   usuario_id (FK)
+
+O modelo relacional evita registros órfãos e garante integridade
+referencial.
+
+------------------------------------------------------------------------
+
+## ▶️ Como Executar
+
+1.  Suba o PostgreSQL
+2.  Verifique as credenciais no `application.properties`
+3.  Execute:
+
+``` bash
+mvn spring-boot:run
+```
+
+Disponível em:
+
+    http://localhost:8080
+
+------------------------------------------------------------------------
+
+## 👨‍💻 Autor
+
+Desenvolvido por **João Victor**
+
+🔗 [LinkedIn](https://www.linkedin.com/in/vsalescode/)
+🌐 [Portfólio](https://portfolio-vsalescode.vercel.app/)
+
