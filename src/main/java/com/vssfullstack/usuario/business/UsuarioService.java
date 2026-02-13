@@ -7,6 +7,7 @@ import com.vssfullstack.usuario.business.dto.UsuarioDTO;
 import com.vssfullstack.usuario.infrastructure.entity.Endereco;
 import com.vssfullstack.usuario.infrastructure.entity.Telefone;
 import com.vssfullstack.usuario.infrastructure.entity.Usuario;
+import com.vssfullstack.usuario.infrastructure.exceptions.BusinessException;
 import com.vssfullstack.usuario.infrastructure.exceptions.ConflictException;
 import com.vssfullstack.usuario.infrastructure.exceptions.ResourceNotFoundException;
 import com.vssfullstack.usuario.infrastructure.repository.EnderecoRepository;
@@ -71,12 +72,12 @@ public class UsuarioService {
 
         // Verifica se o email é nulo ou vazio
         if (email == null || email.trim().isEmpty()) {
-            throw new ConflictException("Email não pode ser vazio.");
+            throw new BusinessException("Email não pode ser vazio.");
         }
 
         // Verificação simples de formato
         if (!email.contains("@")) {
-            throw new ConflictException("Email inválido.");
+            throw new BusinessException("Email inválido.");
         }
     }
 
@@ -85,12 +86,12 @@ public class UsuarioService {
 
         // Verifica se a senha é nula ou vazia
         if (senha == null || senha.trim().isEmpty()) {
-            throw new ConflictException("Senha não pode ser vazia.");
+            throw new BusinessException("Senha não pode ser vazia.");
         }
 
         // Verifica tamanho mínimo da senha
         if (senha.length() < 6) {
-            throw new ConflictException("Senha deve ter pelo menos 6 caracteres.");
+            throw new BusinessException("Senha deve ter pelo menos 6 caracteres.");
         }
     }
 
